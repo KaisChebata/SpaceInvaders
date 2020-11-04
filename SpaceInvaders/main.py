@@ -47,7 +47,11 @@ while running:
 
     # changing player X axis before drawing it.
     player_x += x_shift
-
+    if player_x <= 0:
+        player_x = 0
+    elif player_x >= 736:
+        player_x =736 
+    
     # drawing player
     player(player_x, player_y)
 
