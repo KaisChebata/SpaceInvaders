@@ -7,6 +7,9 @@ pygame.init()
 # set game screen
 screen = pygame.display.set_mode((800, 600))
 
+# Set Background
+background = pygame.image.load('SpaceInvaders/raw_data/background.png')
+
 # Title and Icon
 pygame.display.set_caption('Space Invaders')
 icon = pygame.image.load('SpaceInvaders/raw_data/space_invaders_icon.png')
@@ -16,7 +19,7 @@ pygame.display.set_icon(icon)
 enemy_image = pygame.image.load('SpaceInvaders/raw_data/enemy.png')
 enemy_x = random.randint(0, 736)
 enemy_y = random.randint(50, 150)
-enemy_xshift, enemy_yshift = 0.3, 40
+enemy_xshift, enemy_yshift = 4.5, 40
 
 # Player
 player_img = pygame.image.load('SpaceInvaders/raw_data/player.png')
@@ -37,6 +40,9 @@ while running:
     # drawing screen
     screen.fill((0, 0, 0))
 
+    # drawing Background Image
+    screen.blit(background, (0, 0))
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -46,10 +52,10 @@ while running:
             # print('a keystroke is pressed ....') # this comment and other similar to for debugging
             if event.key == pygame.K_LEFT:
                 # print('left arrow is pressed ....')
-                player_xshift = -0.3
+                player_xshift = -5
             if event.key == pygame.K_RIGHT:
                 # print('right arrow is pressed ....')
-                player_xshift = 0.3
+                player_xshift = 5
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                 # print('keystroke has been released ....')
@@ -67,10 +73,10 @@ while running:
     enemy_x += enemy_xshift
 
     if enemy_x <= 0:
-        enemy_xshift = 0.3
+        enemy_xshift = 4.5
         enemy_y += enemy_yshift
     elif enemy_x >= 736:
-        enemy_xshift = -0.3
+        enemy_xshift = -4.5
         enemy_y += enemy_yshift
     
     # drawing player
