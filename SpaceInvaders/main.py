@@ -26,7 +26,7 @@ enemy_x_shifts = []
 enemy_y_shifts = []
 enemies_num = 6
 # 
-enemy_image = pygame.image.load('SpaceInvaders/raw_data/enemy.png')
+enemy_image = pygame.image.load('SpaceInvaders/raw_data/enemy_ufo.png')
 
 for i in range(enemies_num):
     # enemy_images.append(enemy_image)
@@ -51,12 +51,15 @@ player_x, player_y = 370, 480
 player_xshift = 0
 
 # Score:
-score = 0
+score_value = 0
+font = pygame.font.Font('freesansbold.ttf', 32)
+text_x, text_y = 10, 10
+
 
 def player(x_axis, y_axis):
     screen.blit(player_img, (x_axis, y_axis))
 
-def enemy(x_axis, y_axis, i):
+def enemy(x_axis, y_axis):
     screen.blit(enemy_image, (x_axis, y_axis))
 
 def fire_bullet(x_axis, y_axis):
@@ -70,6 +73,10 @@ def is_collision(enemy_x_axis, enemy_y_axis, bullet_x_axis, bullet_y_axis):
         (pow(enemy_x_axis - bullet_x_axis,2)) + (pow(enemy_y_axis - bullet_y_axis, 2))
         )
     return True if distance < 27 else False
+
+def show_score(x_axis, y_axis):
+    score = font.render(f'Score:{score_value}', True, (190, 85, 200))
+    screen.blit(score, (x_axis, y_axis))
 
 # Game loop
 running = True
@@ -136,12 +143,11 @@ while running:
         if collision:
             bullet_y = 480
             bullet_state = 'ready'
-            score += 1
-            print(score)
+            score_value += 1
             x_coordinates[i] = random.randint(0, 735)
             y_coordinates[i] = random.randint(50, 150)
         
-        enemy(x_coordinates[i], y_coordinates[i], i)
+        enemy(x_coordinates[i], y_coordinates[i])
     
     # Bullet Movement
     if bullet_y <= 0:
@@ -154,6 +160,9 @@ while running:
     
     # drawing player
     player(player_x, player_y)
+
+    # rendering the score
+    show_score(text_x, text_y)
 
     # updating screen
     pygame.display.update()
