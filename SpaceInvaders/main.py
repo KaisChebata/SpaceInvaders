@@ -1,5 +1,7 @@
 import pygame
 import random
+from math import sqrt, pow
+
 
 # intialize pygame
 pygame.init()
@@ -17,7 +19,7 @@ pygame.display.set_icon(icon)
 
 # Enemy
 enemy_image = pygame.image.load('SpaceInvaders/raw_data/enemy.png')
-enemy_x = random.randint(0, 736)
+enemy_x = random.randint(0, 735)
 enemy_y = random.randint(50, 150)
 enemy_xshift, enemy_yshift = 4.5, 40
 
@@ -35,6 +37,9 @@ player_img = pygame.image.load('SpaceInvaders/raw_data/player.png')
 player_x, player_y = 370, 480
 player_xshift = 0
 
+# Score:
+score = 0
+
 def player(x_axis, y_axis):
     screen.blit(player_img, (x_axis, y_axis))
 
@@ -46,6 +51,12 @@ def fire_bullet(x_axis, y_axis):
     bullet_state = 'fire'
 
     screen.blit(bullet_img, (x_axis + 16, y_axis + 10))
+
+def is_collision(enemy_x_axis, enemy_y_axis, bullet_x_axis, bullet_y_axis):
+    distance = sqrt(
+        (pow(enemy_x_axis - bullet_x_axis,2)) + (pow(enemy_y_axis - bullet_y_axis, 2))
+        )
+    return True if distance < 27 else False
 
 # Game loop
 running = True
@@ -74,7 +85,7 @@ while running:
                 player_xshift = 5
             if event.key == pygame.K_SPACE:
                 # stoping bullet from movement with spaceship after first shout
-                if bullet_state is 'ready':
+                if bullet_state == 'ready':
                     # get the currenct x cordinate of the spaceship
                     bullet_x = player_x
                     fire_bullet(bullet_x, bullet_y)
@@ -107,10 +118,20 @@ while running:
         bullet_y = 485
         bullet_state = 'ready'
 
-    if bullet_state is 'fire':
+    if bullet_state == 'fire':
         fire_bullet(bullet_x, bullet_y)
         bullet_y -= bullet_yshift
-
+    
+    # collision
+    collision = is_collision(enemy_x, enemy_y, bullet_x, bullet_y)
+    if collision:
+        bullet_y = 480
+        bullet_state = 'ready'
+        score += 1
+        print(score)
+        enemy_x = random.randint(0, 735)
+        enemy_y = random.randint(50, 150)
+    
     # drawing player
     player(player_x, player_y)
 
