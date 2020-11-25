@@ -1,7 +1,8 @@
-import pygame
-import random
 from math import sqrt, pow
+import random
 
+import pygame
+from pygame import mixer
 
 # intialize pygame
 pygame.init()
@@ -11,6 +12,10 @@ screen = pygame.display.set_mode((800, 600))
 
 # Set Background
 background = pygame.image.load('SpaceInvaders/raw_data/background.png')
+
+# Set Music Background
+mixer.music.load('SpaceInvaders/raw_data/background_music.wav')
+mixer.music.play(-1)
 
 # Title and Icon
 pygame.display.set_caption('Space Invaders')
@@ -106,9 +111,13 @@ while running:
             if event.key == pygame.K_SPACE:
                 # stoping bullet from movement with spaceship after first shout
                 if bullet_state == 'ready':
+                    # bullet sound
+                    bullet_sound = mixer.Sound('SpaceInvaders/raw_data/laser.wav')
+                    bullet_sound.play()
                     # get the currenct x cordinate of the spaceship
                     bullet_x = player_x
                     fire_bullet(bullet_x, bullet_y)
+                    
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                 # print('keystroke has been released ....')
@@ -141,6 +150,8 @@ while running:
             bullet_x, bullet_y)
 
         if collision:
+            explosion_sound = mixer.Sound('SpaceInvaders/raw_data/explosion.wav')
+            explosion_sound.play()
             bullet_y = 480
             bullet_state = 'ready'
             score_value += 1
