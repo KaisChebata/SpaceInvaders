@@ -55,11 +55,13 @@ player_img = pygame.image.load('SpaceInvaders/raw_data/player.png')
 player_x, player_y = 370, 480
 player_xshift = 0
 
-# Score:
+# Score
 score_value = 0
 font = pygame.font.Font('freesansbold.ttf', 32)
 text_x, text_y = 10, 10
 
+# Game Over
+game_over_font = pygame.font.Font('freesansbold.ttf', 64)
 
 def player(x_axis, y_axis):
     screen.blit(player_img, (x_axis, y_axis))
@@ -82,6 +84,10 @@ def is_collision(enemy_x_axis, enemy_y_axis, bullet_x_axis, bullet_y_axis):
 def show_score(x_axis, y_axis):
     score = font.render(f'Score:{score_value}', True, (190, 85, 200))
     screen.blit(score, (x_axis, y_axis))
+
+def show_game_over():
+    game_over = game_over_font.render('GAME OVER', True, (255, 255, 255))
+    screen.blit(game_over, (200, 250))
 
 # Game loop
 running = True
@@ -135,6 +141,13 @@ while running:
     # drawing enemy, and calculating collision
 
     for i in range(enemies_num):
+        # Checking if Game is Over
+        if y_coordinates[i] > 200:
+            for j in range(enemies_num):
+                y_coordinates[j] = 650
+            mixer.music.stop()
+            show_game_over()
+            break
         # Checking X axis, Y axis Boundaries
         x_coordinates[i] += enemy_x_shifts[i]
         if x_coordinates[i] <= 0:
