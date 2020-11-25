@@ -142,7 +142,7 @@ while running:
 
     for i in range(enemies_num):
         # Checking if Game is Over
-        if y_coordinates[i] > 200:
+        if y_coordinates[i] > 440:
             for j in range(enemies_num):
                 y_coordinates[j] = 650
             mixer.music.stop()
